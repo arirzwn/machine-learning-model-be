@@ -11,7 +11,12 @@ app = Flask(__name__)
 CORS(app, resources={r"/predict": {"origins": "http://localhost:5173"}}, supports_credentials=True)
 
 # Load model
-model = joblib.load('model_regresi_padi.pkl')
+try:
+    model = joblib.load('model_regresi_padi.pkl')
+except Exception as e:
+    print("❌ Gagal load model:", str(e))
+    model = None
+
 
 @app.route('/predict', methods=['POST', 'OPTIONS'])
 def predict():
