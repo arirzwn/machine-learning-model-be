@@ -1,6 +1,3 @@
-[build]
-# Railway build configuration
-
 [deploy]
 healthcheckPath = "/health"
 healthcheckTimeout = 300
