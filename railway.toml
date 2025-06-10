@@ -1,2 +1,7 @@
 [build]
-# No need to specify root since we're already in the backend directory
+# Railway build configuration
+
+[deploy]
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"

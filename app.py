@@ -27,8 +27,13 @@ CORS(app, resources={
 
 # Load model
 try:
-    model = joblib.load('model_regresi_padi.pkl')
-    logger.info("✅ Model loaded successfully")
+    model_path = 'model_regresi_padi.pkl'
+    if os.path.exists(model_path):
+        model = joblib.load(model_path)
+        logger.info("✅ Model loaded successfully")
+    else:
+        logger.error(f"❌ Model file not found at {model_path}")
+        model = None
 except Exception as e:
     logger.error(f"❌ Gagal load model: {str(e)}")
     model = None
@@ -90,4 +95,6 @@ def health_check():
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    app.run(debug=False, host='0.0.0.0', port=port)
+    debug = os.environ.get("FLASK_DEBUG", "False").lower() == "true"
+    logger.info(f"Starting Flask app on port {port}, debug={debug}")
+    app.run(debug=debug, host='0.0.0.0', port=port)
