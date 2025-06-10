@@ -1,24 +1,29 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import joblib  # atau bisa tetap pakai joblib
+import joblib
 import numpy as np
 
 app = Flask(__name__)
-CORS(app, origins="*", allow_headers="*")
+
+# Konfigurasi eksplisit agar preflight (OPTIONS) request juga diizinkan
+CORS(app, resources={r"/predict": {"origins": "http://localhost:5173"}}, supports_credentials=True)
 
 # Load model
 model = joblib.load('model_regresi_padi.pkl')
 
-@app.route('/predict', methods=['POST'])
+@app.route('/predict', methods=['POST', 'OPTIONS'])
 def predict():
+    if request.method == 'OPTIONS':
+        # Jawaban untuk preflight
+        response = app.make_default_options_response()
+        return response
+
     data = request.json
-    
-    # Opsi 1: Menggunakan format array seperti contoh
+
     if 'features' in data:
         features = np.array(data['features']).reshape(1, -1)
     else:
-        # Opsi 2: Tetap menggunakan format individual fields seperti kode asli Anda
-        features = np.array([[
+        features = np.array([[ 
             data['Tahun'],
             data['Bulan'],
             data['Luas_Lahan'],
