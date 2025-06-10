@@ -4,7 +4,7 @@ import joblib  # atau bisa tetap pakai joblib
 import numpy as np
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:5173"])
+CORS(app, origins="*", allow_headers="*")
 
 # Load model
 model = joblib.load('model_regresi_padi.pkl')
