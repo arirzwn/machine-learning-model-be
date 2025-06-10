@@ -1,2 +1,2 @@
 [build]
-root = "backend"
+# No need to specify root since we're already in the backend directory
