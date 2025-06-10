@@ -2,8 +2,10 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import joblib
 import numpy as np
+import os
 
 app = Flask(__name__)
+
 
 # Konfigurasi eksplisit agar preflight (OPTIONS) request juga diizinkan
 CORS(app, resources={r"/predict": {"origins": "http://localhost:5173"}}, supports_credentials=True)
@@ -37,5 +39,8 @@ def predict():
     prediction = model.predict(features)
     return jsonify({'prediction': prediction.tolist()})
 
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)
